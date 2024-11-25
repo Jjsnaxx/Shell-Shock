@@ -17,7 +17,8 @@ Exploit the vulnerability and execute arbitrary commands on the target machine.
 <h3>Tools:</h3>
 
 [Nmap](https://nmap.org/) <br />
-[BurpSuite](https://portswigger.net/burp/documentation/desktop/getting-started/download-and-install)
+[BurpSuite](https://portswigger.net/burp/documentation/desktop/getting-started/download-and-install) <br />
+[NetCat](https://nmap.org/ncat/)
 
 <br />
 
@@ -72,7 +73,7 @@ Exploit the vulnerability and execute arbitrary commands on the target machine.
 <br />
 
 - From the Nmap scan we can see that it is vulnerable to the shellshock exploit.
-- Lets use burpsuite to abuse this. First we switch on FoxyProxy.
+- Lets use BurpSuite to exploit this. First we switch on FoxyProxy.
 <img src="https://i.imgur.com/17acyhU.jpeg"/>
 
 
@@ -95,56 +96,29 @@ Exploit the vulnerability and execute arbitrary commands on the target machine.
 <br />
 <br />
 
-- Lets test if we can inject special characters under the User-agent. First we try to enumerate the passwd file.
+- First we try to enumerate the passwd file.
 <img src="https://i.imgur.com/w0qFNEv.jpeg"/>
 
 
 <br />
 <br />
 
-- First lets boot up the lab instance.
-<img src="/>
+- Perfect it works. Let's modify the payload to enumerate the User ID.
+<img src="https://i.imgur.com/GttOyvB.jpeg"/>
 
 
 <br />
 <br />
 
-- First lets boot up the lab instance.
-<img src="/>
+- Lastly let's see what kind of processes are running on this system.
+<img src="https://i.imgur.com/nPzH8OJ.jpeg"/>
 
 
 <br />
 <br />
 
-- First lets boot up the lab instance.
-<img src="/>
-
-
-<br />
-<br />
-
-- First lets boot up the lab instance.
-<img src="/>
-
-
-<br />
-<br />
-
-- First lets boot up the lab instance.
-<img src="/>
-
-
-<br />
-<br />
-
-- First lets boot up the lab instance.
-<img src="/>
-
-
-<br />
-<br />
-
-
+<h3>Conclusion:</h3>
+In this lab, we learned about the exploitation of the "Shellshock" vulnerability (CVE-2014-6071) and performed an attack against a web server.
 
 
 <!--
