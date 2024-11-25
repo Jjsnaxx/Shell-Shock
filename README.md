@@ -11,153 +11,138 @@ In this lab, we will focus on OWASP A9 Using Components with Known Vulnerabiliti
 <h3>Lab Environment:</h3>
 In this lab environment, you will be provided with GUI access to a Kali machine. The target machine will be accessible at demo.ine.local.
 
-Objective: Exploit the vulnerability and execute arbitrary commands on the target machine.
+<h3>Objective:</h3>
+Exploit the vulnerability and execute arbitrary commands on the target machine.
 
 <h3>Tools:</h3>
-[PicoCTF](https://play.picoctf.org/practice?category=5&page=1)
-BurpSuite
+
+[Nmap](https://nmap.org/) <br />
+[BurpSuite](https://portswigger.net/burp/documentation/desktop/getting-started/download-and-install)
 
 <br />
 
 <p align="center">
   
-<h2>Questions:</h2>
-   
-Q1. As an analyst, you need to submit details to the CTI team. What is the signature left by the threat actor that compromised the website? (2 points)
+<h2>Actions:</h2>
 
-- We investigate the 'after.jpg' file. At the bottom right hand side we can see the answer.
-<img src="https://i.imgur.com/2HxuPKQ.png" height="80%" width="80%" alt="after.jpg"/>
+- First lets boot up the lab instance.
+<img src="https://i.imgur.com/ArGcLEH.jpeg"/>
 
-Answer: Team ApashKirikiri2.0
 
 <br />
 <br />
 
-Q2. The attacker deleted some files. What are they? (Alphabetical order based on filename) (2 points)
+- Next we ping the IP provided to check if it is reachable
+<img src="https://i.imgur.com/Bvd4dhX_d.webp?maxwidth=760&fidelity=grand"/>
 
-- We investigate the 'Fim2.jpg' file and we can see two files were deleted with rule id 553.
-
-
-<img src="https://i.imgur.com/nypU4P0.png" height="80%" width="80%" alt="deleted files"/>
-
-Answer: Access_log, Error_log
 
 <br />
 <br />
 
-Q3. What is the scanner used by the attacker to identify the vulnerability? (3 points)
+- Nmap SV scan to check what port is being used and what services are online.
+<img src="https://i.imgur.com/fiN4EAH_d.webp?maxwidth=760&fidelity=grand"/>
 
-- Start by going through our available fields. It is pretty limited in what we can search for.
-<img src="https://i.imgur.com/6GgHyDd.png" height="10%" width="20%" alt="fields"/>
-
-
-- So I start filtering with 'verb' aka HTTP commands. Removing GET and POST and making sure a verb 'exists'. I start looking at each individual command for suspicious logs. Dropped the log count to 26.
-<img src="https://i.imgur.com/HHd9Mnl.png" height="80%" width="80%" alt="deleted files"/>
-
-
-- From the remaining logs there are 2 suspicious events. 
-<img src="https://i.imgur.com/JDWXUJo.png" height="80%" width="80%" alt="suspicious log"/>
-<img src="https://i.imgur.com/EndWCuh.png" height="80%" width="80%" alt="suspicious log"/>
-
-- A quick search through google helps us find what NIKTO is. 
-<img src="https://i.imgur.com/gFSOcmt.png" height="80%" width="80%" alt="nikto"/>
-
-
-Answer: Nikto
 
 <br />
 <br />
 
-Q4. Which PHP page is vulnerable to Remote File Inclusion (RFI)? (2 points)
+- Cool we see that on port 80 there is an Apache web server.
+- Lets see what the website looks like. We navigate to demo.ine.local using Firefox.
+<img src="https://i.imgur.com/7T7eZVC_d.webp?maxwidth=760&fidelity=grand"/>
 
-- Personally had no idea what RFI was and how it worked. So I did a quick google search.
-- According to google: "RFI is a type of vulnerability that allows an attacker to include a remote file, usually through a script on the web server. This can occur due to improper handling of user inputs in the PHP code, particularly in functions or statements that include files."
-Cool. So I'm going to try look for a file that was downloaded from a suspicious site.
-- So the verb I filter for is 'GET' looking for any suspicious PHP file. Pretty much immediately I find a suspicious sounding file called 'backdoor.jpg.php'. 
-<img src="https://i.imgur.com/sL728vf.png" height="100%" width="100%" alt="RFI"/>
-
-- Filtering for backdoor.jpg.php we find out it was downloaded through mediafire with a parameter called getimageonly.php.
-<img src="https://i.imgur.com/SH7w7dr.png" height="80%" width="80%" alt="fields"/>
-
-Answer: getimagesonly.php
 
 <br />
 <br />
 
-Q5. What is the IP address of the remote attacker? (3 points)
+- On the landing page we see there is a dynamic countdown timer being used. We can assume the web server is using a script to do this.
+- Lets check the Web page source.
+<img src="https://i.imgur.com/FSIIy4o_d.webp?maxwidth=760&fidelity=grand"/>
 
-- I just looked at the IP that was trying to download the suspicious file from the previous question.
-<img src="https://i.imgur.com/5plWK7E.png" height="80%" width="80%" alt="attacker IP"/>
-
-Answer: 91.192.103.35
 
 <br />
 <br />
 
-Q6. What is the name of the PHP shell? (2 points)
+- We can see that the webpage is using a CGI script called gettime.cgi
+- Next I want to check if this CGI script is vulnerable to the shellshock exploit.
+- We can do this using a Nmap script called 'http-shellshock' and providing the correct arguments.
+<img src="https://i.imgur.com/Imwc761.jpeg"/>
 
-- I had no clue what a PHP shell was either so I had to do some research on that.
-- According to google: "HP Shell or Shell PHP is a program or script written in PHP (Php Hypertext Preprocessor) which provides Linux Terminal (Shell is a much broader concept) in Browser. PHP Shell lets you to execute most of the shell commands in browser, but not all due to its limitations"
-- Cool so I knew to look for a PHP file, lucky for me I had a good idea where to look. 'backdoor.jpg.php'. Clearly a suspicious sounding PHP file pretending to be a JPG file.
-
-Answer: backdoor.jpg.php
 
 <br />
 <br />
 
-Q7. The attacker downloaded the PHP shell from a file-hosting website. What is the name of the website? (2 points)
+- From the Nmap scan we can see that it is vulnerable to the shellshock exploit.
+- Lets use burpsuite to abuse this. First we switch on FoxyProxy.
+<img src="https://i.imgur.com/17acyhU.jpeg"/>
 
-- This ones pretty self explanatory, we saw from question 4 where the file was downloaded from.
-
-Answer: mediafire.com
 
 <br />
 <br />
 
-Q8. What time was the first command executed through the PHP shell? (3 points)
+- Next lets bootup Burpsuite using default configurations.
+<img src="https://i.imgur.com/opQIGM4.jpeg"/>
 
--We search through the logs with the PHP shell file. Looking at the time from when it was downloaded onwards. I can see the command 'whoami'
-
-<img src="https://i.imgur.com/VVy2iDI.png" height="80%" width="80%" alt="first command"/>
-
-Answer: 18/02/2021 11:42:44
 
 <br />
 <br />
 
-Q9. Which config file does the attacker attempt to read using the command 'cat'? (2 points)
+- Navigate to the 'Proxy' tab and ensure 'Intercept is on' is selected.
+- Forward the request. Send the request to the repeater.
+<img src="https://i.imgur.com/rJs20aR_d.webp?maxwidth=760&fidelity=grand"/>
+<img src="https://i.imgur.com/uD9A7j6.jpeg"/>
 
--The keywords I was looking for was cat and config file.  I filtered for "backdoor.jpg.php" and "cat"
-<img src="https://i.imgur.com/2pnmg2v.png" height="80%" width="80%" alt="first command"/>
-
-Answer: lampp/htdocs/MikePharmaSystem/config.php
 
 <br />
 <br />
 
-Q10. At what time was the database dumped by the attacker? (2 points)
+- Lets test if we can inject special characters under the User-agent. First we try to enumerate the passwd file.
+<img src="https://i.imgur.com/w0qFNEv.jpeg"/>
 
--A quick google search tells me a database dump file extension would be db or dump. So I try filtering for those two. I find a log with the message saying 'db_export.php'.
-<img src="https://i.imgur.com/uVFcwlb.png" height="80%" width="80%" alt="first command"/>
-
-Answer: 18/02/2021 11:44:59
 
 <br />
 <br />
 
-Q11. The attacker exfiltrated the database records. What is the database name? (Just the name, without any extension) (2 points)
-
--I look at the details of the request to export the database. I can see the name of the database.
-<img src="https://i.imgur.com/TEGkniV.png" height="80%" width="80%" alt="first command"/>
-
-Answer: Mike_Pharmaceuticals
+- First lets boot up the lab instance.
+<img src="/>
 
 
+<br />
+<br />
+
+- First lets boot up the lab instance.
+<img src="/>
 
 
+<br />
+<br />
+
+- First lets boot up the lab instance.
+<img src="/>
 
 
+<br />
+<br />
 
+- First lets boot up the lab instance.
+<img src="/>
+
+
+<br />
+<br />
+
+- First lets boot up the lab instance.
+<img src="/>
+
+
+<br />
+<br />
+
+- First lets boot up the lab instance.
+<img src="/>
+
+
+<br />
+<br />
 
 
 
