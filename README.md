@@ -3,17 +3,17 @@
 <h2>Shell-Shock</h2>
 
 
-<h2>Overview:</h2>
+<h3>Overview:</h3>
 
 OWASP Top 10 is an awareness document that outlines the most critical security risks to web applications. Pentesting is performed according to the OWASP TOP 10 standard to reduce or mitigate security risks.
 In this lab, we will focus on OWASP A9 Using Components with Known Vulnerabilities flaws, and we will perform an attack against a web server that is vulnerable to CVE-2014-6071.
 
-<h1>Lab Environment:</h1>
+<h3>Lab Environment:</h3>
 In this lab environment, you will be provided with GUI access to a Kali machine. The target machine will be accessible at demo.ine.local.
 
 Objective: Exploit the vulnerability and execute arbitrary commands on the target machine.
 
-<h1>Tools:</h1>
+<h3>Tools:</h3>
 Nmap
 BurpSuite
 
