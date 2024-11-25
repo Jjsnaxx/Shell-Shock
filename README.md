@@ -14,8 +14,8 @@ In this lab environment, you will be provided with GUI access to a Kali machine.
 Objective: Exploit the vulnerability and execute arbitrary commands on the target machine.
 
 <h3>Tools:</h3>
-- Nmap
-- BurpSuite
+-Nmap
+  -BurpSuite
 
 <br />
 
