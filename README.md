@@ -88,7 +88,7 @@ Exploit the vulnerability and execute arbitrary commands on the target machine.
 <br />
 
 - Navigate to the 'Proxy' tab and ensure 'Intercept is on' is selected.
-- Forward the request. Send the request to the repeater.
+- Forward the request. Refresh the web page to intercept. Send the request to the repeater.
 <img src="https://i.imgur.com/rJs20aR_d.webp?maxwidth=760&fidelity=grand"/>
 <img src="https://i.imgur.com/uD9A7j6.jpeg"/>
 
